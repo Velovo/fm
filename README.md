@@ -4,6 +4,7 @@ Install dependencies with:
 pip3 install -r requirements.txt
 mv token_sample.json token.json
 ```
+youtube-dl and ffmpeg must in your PATH
 Fill the token.json file with twitter api credentials (not needed if you do not plan to use the radio command)
 
 Run with:
