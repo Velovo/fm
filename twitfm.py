@@ -24,7 +24,7 @@ def random_string(length):
 
 def test_string(strr):
     for i in strr:
-        if i.isalnum() or i == '-' or i == '?' or i == '=':
+        if i.isalnum() or i == '-' or i == '?' or i == '=' or i == '_':
             pass
         else:
             return 1
@@ -38,7 +38,7 @@ def download_and_play(filename, url):
         playsound(filename + '.mp3')
         print('Finished audio\ndeleting file')
         os.remove(filename + '.mp3')
-    elif url.startswith('https://open.spotify.com/track/') and test_string(url.split('https://youtu.be/')[1]) == 0:
+    elif url.startswith('https://open.spotify.com/track/') and test_string(url.split('https://open.spotify.com/track/')[1]) == 0:
         print('Starting spotdl')
         os.system('spotdl -o mp3 -f' + filename + '.mp3 --song ' + url)
         c_file = eyed3.load(filename + '.mp3')
@@ -46,23 +46,24 @@ def download_and_play(filename, url):
         playsound(filename + '.mp3')
         print('Finished audio\ndeleting file')
         os.remove(filename + '.mp3')
+    else:
+        time.sleep(10) #maybe i fucked up the verification url so i sleep not to spam twitter api
 
 def geturl():
     i = 0
     url = None
 
     print('Getting url')
-    while url == None:
-        i = 0
-        ret = api.GetSearch(raw_query='q=open.spotify.com&result_type=recent&count=10')
-        while i < 10 and url == None:
-            try:
-                url = ret[i].urls[0].expanded_url
-                if not url.startswith('https://open.spotify.com/track/'):
-                    url = None
-            except:
-                pass
-            i = i + 1
+    i = 0
+    ret = api.GetSearch(raw_query='q=open.spotify.com&result_type=recent&count=10')
+    while i < 10 and url == None:
+        try:
+            url = ret[i].urls[0].expanded_url
+            if not url.startswith('https://open.spotify.com/track/'):
+                url = None
+        except:
+            pass
+        i = i + 1
     return url
 
 def main():
@@ -71,7 +72,6 @@ def main():
 
     if len(sys.argv) > 1:
         while i < len(sys.argv):
-            print(i, len(sys.argv))
             filename = random_string(32)
             download_and_play(filename, sys.argv[i])
             i = i + 1
@@ -81,6 +81,7 @@ def main():
             while url == None:
                 url = geturl()
                 if url == None:
+                    print('sleep')
                     time.sleep(10)
             filename = random_string(32)
             download_and_play(filename, url)
