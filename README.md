@@ -1,4 +1,7 @@
 # fm
+
+Radio in terminal
+
 Install dependencies with:
 ```
 pip3 install -r requirements.txt
