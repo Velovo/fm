@@ -23,3 +23,5 @@ stop                    #stop the music
 delete                  #delete all downloaded mp3
 exit                    #exit the program
 ```
+
+warning: garbage code :/
